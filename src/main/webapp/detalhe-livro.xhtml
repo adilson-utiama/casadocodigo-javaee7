@@ -3,7 +3,12 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:xlink="http://www.w3.org/1999/xlink">
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+	
+	<!-- O namespace com final jsf conseguimos informar ao JSF que um componente HTML será usando pelo JSF. 
+	Enquanto que o namespace passthrough será usado para que componentes JSF possam usar atributos do HTML -->
 
 <f:metadata>
     <f:viewParam id="id" name="id" value="#{livroDetalheBean.id}"/>
@@ -332,7 +337,8 @@
 					</span>
 				</p>
 			</label>
-				<button class="adicionarAoCarrinho-botaoComprar" type="submit" name="id" value="2055441665" title="Compre o E-book">
+				<button class="adicionarAoCarrinho-botaoComprar" type="submit" name="id" value="2055441665" title="Compre o E-book"
+						jsf:action="#{carrinhoComprasBean}">
 					Comprar
 				</button>
 		</li>
@@ -362,6 +368,15 @@
 		</dt>
 		<dd class="infosAdicionaisDoLivro-info-valor" itemprop="numberOfPages">
 			#{livroDetalheBean.livro.numeroPaginas} páginas
+		</dd>
+		
+		<dt class="infosAdicionaisDoLivro-info-titulo">
+			Data de Publicação:
+		</dt>
+		<dd class="infosAdicionaisDoLivro-info-valor" itemprop="numberOfPages">
+			<h:outputText value="#{livroDetalheBean.livro.dataPublicacao.time}">
+			    <f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:outputText>
 		</dd>
 		
 		<dt class="infosAdicionaisDoLivro-info-titulo">
