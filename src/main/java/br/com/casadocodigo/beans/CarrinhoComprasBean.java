@@ -1,5 +1,7 @@
 package br.com.casadocodigo.beans;
 
+import java.util.List;
+
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
@@ -21,8 +23,12 @@ public class CarrinhoComprasBean {
 		Livro livro = livroDAO.buscarPorId(id);
 		CarrinhoItem item = new CarrinhoItem(livro);
 		carrinho.add(item);
-		return "carrinho?faces-redirect=true";
+		return "/carrinho?faces-redirect=true";
 		
+	}
+	
+	public List<CarrinhoItem> getItens() {
+	    return carrinho.getItens();
 	}
 	
 }
