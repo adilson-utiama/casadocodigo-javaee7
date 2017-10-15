@@ -37,5 +37,13 @@ public class CarrinhoCompras implements Serializable{
 		}
     	return total;
     }
+    
+    public void remover(CarrinhoItem item) {
+        this.itens.remove(item);
+    }
+    
+    public Integer getQuantidadeTotal() {
+        return itens.stream().mapToInt(item -> item.getQuantidade()).sum();
+    }
 	
 }
