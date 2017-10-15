@@ -20,6 +20,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import br.com.casadocodigo.repository.CompraDAO;
+import br.com.casadocodigo.service.PagamentoGateway;
 
 @Named
 @SessionScoped
@@ -29,6 +30,9 @@ public class CarrinhoCompras implements Serializable{
 	
 	@Inject
 	private CompraDAO compraDao;
+	
+	@Inject
+	private PagamentoGateway pagamentoGateway;
 	
 	private Set<CarrinhoItem> itens = new HashSet<>();
 
@@ -66,16 +70,7 @@ public class CarrinhoCompras implements Serializable{
 	    compra.setItens(this.toJson(itens));
 	    compraDao.salvar(compra);
 	    
-	    Pagamento pagamento = new Pagamento(getTotal());
-	    Entity<Pagamento> json = Entity.json(pagamento); //Transforma objeto em JSON
-
-	    //Utlizando JAX-RS para realizar o pagamento
-	    Client client = ClientBuilder.newClient();
-	    String target = "http://book-payment.herokuapp.com/payment";
-	    WebTarget webTarget = client.target(target);
-	    
-	    Builder request = webTarget.request();
-	    String response = request.post(json, String.class);
+	    String response = pagamentoGateway.pagar(getTotal());
 	    System.out.println(response);
 		
 	}
