@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import br.com.casadocodigo.model.CarrinhoCompras;
+import br.com.casadocodigo.model.Compra;
 import br.com.casadocodigo.model.Usuario;
 import br.com.casadocodigo.repository.UsuarioDAO;
 
@@ -21,7 +22,10 @@ public class CheckoutBean {
 	
 	@Transactional
 	public void finalizar() {
-		compras.finalizar(usuario);
+		Compra compra = new Compra();
+		compra.setUsuario(usuario);
+		compras.finalizar(compra);
+		
 		dao.salvar(usuario);
 	}
 	

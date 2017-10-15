@@ -8,16 +8,12 @@ import java.util.List;
 import java.util.Set;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.casadocodigo.repository.CompraDAO;
 import br.com.casadocodigo.service.PagamentoGateway;
@@ -33,6 +29,9 @@ public class CarrinhoCompras implements Serializable{
 	
 	@Inject
 	private PagamentoGateway pagamentoGateway;
+	
+	@Inject
+	private FacesContext facesContext;
 	
 	private Set<CarrinhoItem> itens = new HashSet<>();
 
@@ -64,15 +63,19 @@ public class CarrinhoCompras implements Serializable{
         return itens.stream().mapToInt(item -> item.getQuantidade()).sum();
     }
 
-	public void finalizar(Usuario usuario) {
-		Compra compra = new Compra();
-		compra.setUsuario(usuario);
-	    compra.setItens(this.toJson(itens));
+	public void finalizar(Compra compra) {
+		compra.setItens(this.toJson(itens));
 	    compraDao.salvar(compra);
 	    
-	    String response = pagamentoGateway.pagar(getTotal());
-	    System.out.println(response);
-		
+	    String contextName = facesContext.getExternalContext().getRequestContextPath();    
+	    HttpServletResponse response = (HttpServletResponse) 
+	        facesContext.getExternalContext().getResponse();
+
+	    //response.setStatus(307);
+	    response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+	    response.setHeader("Location", contextName + "/services/pagamento?uuid=" + compra.getUuid());
+	    
+	   	
 	}
 
 	private String toJson(Set<CarrinhoItem> itens) {

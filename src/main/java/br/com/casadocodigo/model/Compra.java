@@ -1,11 +1,14 @@
 package br.com.casadocodigo.model;
 
+import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 @Entity
 public class Compra {
@@ -17,7 +20,14 @@ public class Compra {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private Usuario usuario;
 	
+	private String uuid;
+	
 	private String itens;
+	
+	@PrePersist
+	public void createUUID() {
+	    this.uuid = UUID.randomUUID().toString();
+	}
 
 	public Integer getId() {
 		return id;
@@ -42,6 +52,16 @@ public class Compra {
 	public void setItens(String itens) {
 		this.itens = itens;
 	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	
 	
 	
 	
