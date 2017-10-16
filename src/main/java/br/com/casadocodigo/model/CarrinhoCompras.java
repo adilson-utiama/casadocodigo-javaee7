@@ -65,6 +65,7 @@ public class CarrinhoCompras implements Serializable{
 
 	public void finalizar(Compra compra) {
 		compra.setItens(this.toJson(itens));
+		compra.setTotal(getTotal());
 	    compraDao.salvar(compra);
 	    
 	    String contextName = facesContext.getExternalContext().getRequestContextPath();    

@@ -1,5 +1,6 @@
 package br.com.casadocodigo.model;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -21,8 +22,8 @@ public class Compra {
 	private Usuario usuario;
 	
 	private String uuid;
-	
 	private String itens;
+	private BigDecimal total;
 	
 	@PrePersist
 	public void createUUID() {
@@ -60,6 +61,16 @@ public class Compra {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+	
+	
 
 	
 	
