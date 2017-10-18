@@ -18,9 +18,16 @@ public class LivroResource {
 	private LivroDAO dao;
 	
 	@GET
-	@Path("lancamentos")
+	@Path("json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Livro> ultimosLancamentosJson() {
+		return dao.ultimosLancamentos();
+	}
+	
+	@GET
+	@Path("xml")
+	@Produces({ MediaType.APPLICATION_XML })
+	public List<Livro> ultimosLancamentosXml() {
 		return dao.ultimosLancamentos();
 	}
 }

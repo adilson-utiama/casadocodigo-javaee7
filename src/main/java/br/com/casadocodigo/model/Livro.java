@@ -19,12 +19,14 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Cacheable
+@XmlRootElement
 public class Livro {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
