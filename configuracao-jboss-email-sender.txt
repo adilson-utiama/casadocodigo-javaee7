@@ -1,0 +1,48 @@
+O próximo passo é ter a Classe Session funcionando. Fizemos o @Resource(mappedName = "java:/jboss/mail"). 
+Porém de onde vem o java:/jboss/mail? Toda vez que se trata de Java EE, algumas configurações devem ser feitas.
+ Nesse caso será no servidor. Na aba "Servers" selecionamos "Wildfly > Filesets > Configuration File", 
+ dentro dessa pasta achamos o arquivo standalone-full.xml:
+ 
+ 
+ <subsystem xmlns="urn:jboss:domain:mail:2.0">
+    <mail-session name="default" jndi-name="java:jboss/mail/Default">
+        <smtp-server outbound-socket-biding-ref="mail-smtp"/>
+    </mail-session>
+</subsystem>
+
+Verifique se o xmlns é o mesmo que o apresentado acima. O <mail-session> padrão é apenas um exemplo,
+ e perceba que ele tem um jndi diferente daquele com o qual estamos trabalhando. Vamos criar algo parecido:
+ 
+ <mail-session name="gmail" jndi-name="java:jboss/mail/gmail">
+
+</mail-session>
+
+
+Vamos dar o nome e o identificador de gmail (mudamos isso no resource também) pois ele será nosso 
+servidor de envio de e-mail. Ele é o mais fácil e direto de ser usado, mas isso vai depender
+ da produção e se você tiver um servidor próprio. Para o smtp-server fazemos
+ 
+ <smtp-server outbound-socket-biding-ref="mail-smtp-gmail" ssl="true" username="alura.springmvc@gmail.com" password="Alura@2017"/>
+ 
+ 
+ A grande maioria dos servidores de e-mail utilizam ssl, então acrescentamos isso, 
+ além do username e da senha (ambos retirados do nosso curso de Spring MVC) 
+ para fazer esse processo de envio. No fim teremos:
+ 
+ <mail-session name="gmail" jndi-name="java:jboss/mail/gmail">
+    <smtp-server outbound-socket-biding-ref="mail-smtp-gmail" ssl="true" username="alura.springmvc@gmail.com" password="Alura@2017"/>
+</mail-session>
+
+
+
+Perceba que no smtp-serverusamos o outbound-socket-biding-ref. 
+Se formos para o final do arquivo, por volta da linha 465, podemos verificar isso:
+
+<outbound-socket-binding name="mail-smtp-gmail">
+    <remote-destination host="smtp.gmail.com" port="465"/>
+</outbound-socket-binding>
+
+
+No seu e-mail do Gmail devemos fazer uma última configuração. 
+Acessamos a página de segurança e em "Aplicativos e sites conectados" selecionamos 
+a opção "Permitir aplicações menos seguras":
