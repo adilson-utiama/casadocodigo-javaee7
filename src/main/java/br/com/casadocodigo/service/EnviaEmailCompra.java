@@ -15,7 +15,10 @@ import br.com.casadocodigo.repository.CompraDAO;
 @MessageDriven(activationConfig = {
 	    @ActivationConfigProperty(
 	    		propertyName="destinationLookup", 
-	    		propertyValue="java:/jms/topics/CarrinhoComprasTopico")
+	    		propertyValue="java:/jms/topics/CarrinhoComprasTopico"),
+	    @ActivationConfigProperty(
+	    		propertyName="destinationType",
+	            propertyValue="javax.jms.Topic")
 	})
 public class EnviaEmailCompra implements MessageListener{
 		

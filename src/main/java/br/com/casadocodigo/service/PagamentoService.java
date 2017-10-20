@@ -41,7 +41,7 @@ public class PagamentoService {
 	@Inject
 	private JMSContext jmsContext;
 	
-	@Resource(name="java/jms/topics/CarrinhoComprasTopico")
+	@Resource(name="java:/jms/topics/CarrinhoComprasTopico")
 	private Destination destination;
 	
 	
