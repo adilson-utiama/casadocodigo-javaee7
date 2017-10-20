@@ -11,16 +11,18 @@ import javax.mail.internet.MimeMessage;
 @ApplicationScoped
 public class MailSender {
 
-	@Resource(mappedName = "java:/jboss/mail/gmail")
+	@Resource(mappedName = "java:jboss/mail/gmail")
 	private Session session;
 	
 	public void send(String from, String to, String subject, String body) {
 		MimeMessage message = new MimeMessage(session);
 		try {
-			message.addRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
+			message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
 			message.setFrom(new InternetAddress(from));
 		    message.setSubject(subject);
 		    message.setContent(body, "text/html");
+		    
+		   
 		    
 		    Transport.send(message);
 		} catch (MessagingException e) {

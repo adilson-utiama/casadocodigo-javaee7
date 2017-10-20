@@ -4,7 +4,11 @@ import java.net.URI;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.jms.Destination;
+import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
 import javax.servlet.ServletContext;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,7 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.com.casadocodigo.infra.MailSender;
 import br.com.casadocodigo.model.Compra;
 import br.com.casadocodigo.repository.CompraDAO;
 
@@ -32,19 +35,24 @@ public class PagamentoService {
 	@Inject
 	private PagamentoGateway pagamentoGateway;
 	
-	@Inject
-	private MailSender mailSender;
-	
 	@Context
 	private ServletContext context;
 
+	@Inject
+	private JMSContext jmsContext;
+	
+	@Resource(name="java/jms/topics/CarrinhoComprasTopico")
+	private Destination destination;
+	
+	
 	@POST
     public void pagar(@Suspended final AsyncResponse ar, @QueryParam("uuid") String uuid) {
-		System.out.println(uuid);
 		Compra compra = compraDao.buscaPorUuid(uuid);
 		
 		String contextPath = "http://localhost:8080" + context.getContextPath() + "/index.xhtml";
 		System.out.println(contextPath);
+		
+		JMSProducer producer = jmsContext.createProducer();
 		
 		executor.submit(() -> {
 			try {
@@ -55,10 +63,7 @@ public class PagamentoService {
 				Response response = Response.seeOther(responseUri)
 						.build();
 				
-				String messageBody = "Nova Compra na CDC, Sua compra foi realizada com sucesso, "
-						+ "com o número de pedido " + compra.getUuid();
-				
-				mailSender.send("wilson.developer.tester@gmail.com", compra.getUsuario().getEmail(), "Nova compra no CDC", messageBody );
+				producer.send(destination, compra.getUuid());
 				
 				ar.resume(response);
 		        
