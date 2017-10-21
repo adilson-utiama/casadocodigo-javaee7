@@ -1,0 +1,30 @@
+Em standalone-full.xml no wildfly
+Configurando JASS no WildFly
+
+<subsystem xmlns="urn:jboss:domain:security:1.2">
+    <security-domains>
+    .......
+
+	<security-domain name="database-login" cache-type="default">
+        <authentication>
+            <login-module code="Database" flag="required">
+                <module-option name="dsJndiName"
+                    value="java:jboss/datasources/casadocodigoDS" />
+
+                <module-option name="principalsQuery"
+                    value="select senha from SystemUser where email = ?" />
+
+                <module-option name="rolesQuery"
+                    value="select sysRole.roles_name,'Roles'
+                        from SystemUser_SystemRole sysRole inner join SystemUser
+                        su on sysRole.SystemUser_id = su.id where su.email = ?" />
+
+                <module-option name="hashAlgorithm" value="SHA-256" />
+
+                <module-option name="hashEncoding" value="base64" />
+            </login-module>
+        </authentication>
+    </security-domain>
+    
+</security-domains>
+</subsystem>

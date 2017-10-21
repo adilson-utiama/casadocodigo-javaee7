@@ -20,7 +20,7 @@ public class SystemUser {
 	private Integer id;
 
 	@Email
-	private String login;
+	private String email;
 
 	private String senha;
 
@@ -28,11 +28,11 @@ public class SystemUser {
 	private List<SystemRole> roles = new ArrayList<>();
 
 	public String getLogin() {
-		return login;
+		return email;
 	}
 
 	public void setLogin(String login) {
-		this.login = login;
+		this.email = login;
 	}
 
 	public String getSenha() {
