@@ -27,11 +27,11 @@ public class SystemUser {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<SystemRole> roles = new ArrayList<>();
 
-	public String getLogin() {
+	public String getEmail() {
 		return email;
 	}
 
-	public void setLogin(String login) {
+	public void setEmail(String login) {
 		this.email = login;
 	}
 
