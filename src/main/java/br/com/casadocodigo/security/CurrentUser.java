@@ -38,7 +38,7 @@ public class CurrentUser {
     
     public String logout() {
     	request.getSession().invalidate();
-    	return "/livros/lista.xhtml?faces-redirect=true";
+    	return "/admin/livros/lista.xhtml?faces-redirect=true";
     }
     
     public SystemUser get() {
